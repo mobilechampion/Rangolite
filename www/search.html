@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html class="ie ie6" lang="en"> <![endif]-->
+<!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!-->
+<html lang="en">
+<!--<![endif]-->
+<head>
+<meta charset="utf-8">
+<title>Class Chat</title>
+<meta name="description" content="">
+<meta name="author" content="">
+<meta name="viewport" content="width=device-width, user-scalable=no">
+<link rel="stylesheet" href="app_html/css/font.css">
+<link href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,700italic,400,600,700,800" rel='stylesheet' type='text/css'>  
+<link rel="stylesheet" type="text/css" href="app_html/css/style.css" />
+</head>
+
+<body>
+
+
+<div class="page-wrap">
+  
+  <div class="main">
+<div class="wraper">
+<div class="header">
+<h1>RangoLite</h1>
+</div>
+<div class="header_bo">
+<p></p>
+</div>
+
+<div class="search" >
+<div class="search_left"><img src="app_html/images/search.png" alt="icon"></div>
+<div class="search_right"><input type="search" placeholder="search by name or professor..." id="serch_tf1"></div>
+</div>
+<div id="loadingMsg" style="position:relative;  " align="center" >
+    <img src="app_html/images/preloader-grey.gif" width="40"/>
+</div>
+<div class="iner_con" id="content_div">
+
+
+
+</div>
+</div>
+      
+</div>
+
+<footer class="site-footer">
+  <div class="main">
+<div class="wraper">
+  <div class="footer">
+<ul>
+<li><a href="index.html"><span><img src="app_html/images/f1.png" alt="img"></span>My Classes</a></li>
+<li><a href="#"><span><img src="app_html/images/f2.png" alt="img"></span>Search</a></li>
+<li><a href="create.html"><span><img src="app_html/images/f3.png" alt="img"></span>Create</a></li>
+<li><a href="setting.html"><span><img src="app_html/images/f4.png" alt="img"></span>Settings</a></li>
+</ul>
+</div>
+</div>
+      
+</div>
+</footer>
+
+<script type="text/javascript" src="cordova-2.2.0.js"></script>
+<script type="text/javascript" src="js/index.js"></script>
+<script type="text/javascript" src="js/jquery-1.9.0.min.js"></script>
+<script type="text/javascript" src="js/jquery.mobile-1.1.1.js"></script>
+<script type="text/javascript" src="js/modernizr-2.6.1.min.js"></script>
+<script type="text/javascript">
+    
+    document.addEventListener("deviceready",onDeviceReady,false);
+    
+    // Cordova is ready to be used!
+    //
+    function onDeviceReady() {
+        
+        $('#loadingMsg').show();
+        getallclass();
+        
+        
+    }
+var subject_arry = new Array();
+var prop_arry = new Array();
+var time_arry = new Array();
+var classid_arry = new Array();
+var img_ary = new Array();
+
+function  getallclass()
+{
+   // subject_arry.splice(0, subject_arry.length);
+   // prop_arry.splice(0, prop_arry.length);
+   // time_arry.splice(0, time_arry.length);
+   // classid_arry.splice(0, classid_arry.length);
+   //  img_ary.splice(0, img_ary.length);
+   var userid="0";
+  
+        $.ajax({
+               type       : "POST",
+               url        : "http://rangolite.com/coursetalk/webservice/course_talk/fetch_subject.php",
+                 //data       :{user_id:userid},
+               success    : function(response) {
+               
+                  console.log("Gagan"+response);
+               var objJSON = eval("( " + response + ")");
+            
+              console.log(objJSON);
+               $('#loadingMsg').hide();
+               var array_count=objJSON.response.subject.length;
+               // alert("array_count"+objJSON.response.subject);
+               for(var i=0;i<array_count;i++)
+               {
+               
+               subject_arry.push(objJSON.response.subject[i]);
+               
+               prop_arry.push(objJSON.response.professor[i]);
+              
+               time_arry.push(objJSON.response.schedule[i]);
+               
+               classid_arry.push(objJSON.response.class_id[i]);
+               
+               var imageCombined = "http://rangolite.com/coursetalk/webservice/course_talk/"+objJSON.response.image[i];
+               img_ary.push(imageCombined);
+ 
+               }
+                console.log("jjkkll"+subject_arry);
+               getALLarray(subject_arry,prop_arry,time_arry,classid_arry,img_ary);
+               
+               },
+               error      : function() {
+               console.error("error");
+               }
+               });
+    
+}
+
+function getALLarray(subarray,proarray,tmarray,classarray,imagearray)
+{
+    $('#loadingMsg').hide();
+    //alert(imagearray);
+    var tablestring="" ;
+    tablestring =tablestring+ '<table style="width:100%; ">';
+    for (var i = 0, len = subarray.length; i < len; ++i)
+    {
+        
+        var feedsCount=0;
+        tablestring = tablestring + "<tr>";
+       // var stsCount = GetPatientStatusCount(userList[0]);   font-weight: bold;font-size: medium height="20px" width="20px"
+        tablestring = tablestring + '<td><div class="first_noti" onclick="return showFeeds(this.id);" id=' + classarray[i] + '>' +'<div class="first_noti_img"><img  src='+imagearray[i]+' /></div><div name=' + subarray[i] + '  id=' + subarray[i] + ' class="first_noti_con"><h3>'+subarray[i];
+//        if(stsCount>0)
+//        {
+//            tablestring=tablestring + '<input value=" ' + stsCount + ' " type="button" />' ;
+//        }
+        tablestring=tablestring + '</h3><p>'+proarray[i]  +'</p><p>'+ tmarray[i]+'</p></div>';
+        
+        //tablestring=tablestring + '<span>&rsaquo;</span></div>' + '<label>'+ userName[i] + '</label></div>';
+        tablestring = tablestring + "<div></td>";
+        tablestring = tablestring + "</tr>";
+    }
+    tablestring = tablestring + "</table>";
+    var divResult = document.getElementById("content_div");
+    divResult.innerHTML = tablestring;
+}
+function showFeeds(id)
+{
+   $('#loadingMsg').show();
+    var classID=id;
+    var userId=window.localStorage.getItem("user_ID");
+    addUsertToClass(classID,userId);
+}
+function addUsertToClass(clssid,usrid)
+{
+    
+     //alert(clssid+"lloo"+usrid);
+    $.ajax({
+           type       : "POST",
+           url        : "http://rangolite.com/coursetalk/webservice/course_talk/group_join.php",
+           data       :{class_id :clssid , user_id : usrid},
+           success    : function(response) {
+           var objJSON = eval("( " + response + ")");
+           
+          // var array_count=objJSON.response.subject.length;
+           navigator.notification.alert(objJSON.response);
+           
+           
+           },
+           error      : function() {
+           console.error("error");
+           }
+           });
+          $('#loadingMsg').hide(); 
+}
+$("#serch_tf1").keyup(function() {
+                         
+   // alert("kk"+subject_arry);
+                      var retarry=new Array();
+
+                      var tempprop_arry = new Array();
+                      var temptime_arry = new Array();
+                      var tempclassid_arry = new Array();
+                      var tempimg_ary = new Array();
+                     
+                      
+                      
+                      
+                      var txt=serch_tf1.value;
+                      
+                      
+                      
+                      
+                      
+                      
+                    var array_count=subject_arry.length;
+                      //alert("array_count"+objJSON.response.image);
+                      for(var i=0;i<array_count;i++)
+                      {
+                      var str1 = subject_arry[i];
+                      var str2 = serch_tf1.text;
+                      var re = new RegExp("\\b"+txt+"\\w*","ig");
+                      if(str1.match(re)){
+                     // alert("matched"+str1)
+                      retarry.push(str1);
+                      tempprop_arry.push(prop_arry[subject_arry.indexOf(str1)]);
+                       tempimg_ary.push(img_ary[subject_arry.indexOf(str1)]);
+                       temptime_arry.push(time_arry[subject_arry.indexOf(str1)]);
+                      tempclassid_arry.push(classid_arry[subject_arry.indexOf(str1)])
+                      }
+                      else {
+                    //  alert("doesnt match"+re)
+                      
+                      }
+                      }
+                       getALLarray(retarry,tempprop_arry,temptime_arry,tempclassid_arry,tempimg_ary);
+                   //   alert("lll"+retarry+tempprop_arry+temptime_arry);
+                      // alert("lll"+temptime_arry);
+});
+
+</script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+@font-face {
+	font-family: 'ITCAVANTGARDEGOTHICLTMEDIUM';
+	src: url('./ITCAVANTGARDEGOTHICLTMEDIUM.eot');
+	src: local('ITCAVANTGARDEGOTHICLTMEDIUM'), url('./ITCAVANTGARDEGOTHICLTMEDIUM.woff') format('woff'), url('./ITCAVANTGARDEGOTHICLTMEDIUM.ttf') format('truetype');
+}
+/* use this class to attach this font to any element i.e. <p class="fontsforweb_fontid_7916">Text with this font applied</p> */
+.fontsforweb_fontid_7916 {
+	font-family: 'ITCAVANTGARDEGOTHICLTMEDIUM' !important;
+}
+
+/* Font downloaded from FontsForWeb.com */

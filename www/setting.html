@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html class="ie ie6" lang="en"> <![endif]-->
+<!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!-->
+<html lang="en">
+<!--<![endif]-->
+<head>
+<meta charset="utf-8">
+<title>Class Chat</title>
+<meta name="description" content="">
+<meta name="author" content="">
+<meta name="viewport" content="width=device-width, user-scalable=no">
+<link rel="stylesheet" href="app_html/css/font.css">
+<link href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,700italic,400,600,700,800" rel='stylesheet' type='text/css'>
+<link rel="stylesheet" type="text/css" href="app_html/css/style.css" />
+</head>
+
+<body>
+
+
+<div class="page-wrap">
+<div class="main">
+<div class="wraper">
+<div class="header">
+<h1>RangoLite</h1>
+</div>
+<div class="header_bo">
+<p></p>
+</div>
+
+<div class="iner_con">
+    
+    <div class="user_img" id="left_img">
+        <div class="image" onclick="selectPicture(pictureSource.PHOTOLIBRARY);">
+            <img src="app_html/images/picp.jpg" alt="profile" id="prf_img">
+                </div>
+        <input type="button" value="Change Profile Picture" class="button" onclick="updatepic();">
+            </div>
+<div class="input_feild">
+<label>Username</label>
+<input type="text" name="Econ 101" placeholder="username" id="usrname_tf">
+    <input type="button" value="Update" class="button" onclick="updatename();">
+    
+    <label>Change Password</label> <input id="password_tf" type="password" name="Password" placeholder="New Password" class="pass">
+        <input type="button" value="Change Password" class="button"
+            onclick="updatepassword();">
+            
+            
+            
+</div>
+
+
+
+
+
+<div class="input_feild">
+
+    
+<input type="button" value="Logout" class="button" onclick="logout();">
+</div>
+</div>
+
+
+
+</div>
+</div> 
+</div>
+
+<footer class="site-footer">
+  <div class="main">
+<div class="wraper">
+  <div class="footer">
+<ul>
+<li><a href="index.html"><span><img src="app_html/images/f1.png" alt="img"></span>My Classes</a></li>
+<li><a href="search.html"><span><img src="app_html/images/f2.png" alt="img"></span>Search</a></li>
+<li><a href="create.html"><span><img src="app_html/images/f3.png" alt="img"></span>Create</a></li>
+<li><a href="#"><span><img src="app_html/images/f4.png" alt="img"></span>Settings</a></li>
+</ul>
+</div>
+</div>
+      
+</div>
+</footer>
+
+<script type="text/javascript" src="cordova-2.2.0.js"></script>
+<script type="text/javascript" src="js/index.js"></script>
+<script type="text/javascript" src="js/jquery-1.9.0.min.js"></script>
+<script type="text/javascript" src="js/jquery.mobile-1.1.1.js"></script>
+<script type="text/javascript" src="js/modernizr-2.6.1.min.js"></script>
+<script type="text/javascript">
+    document.addEventListener("deviceready",onDeviceReady,false);
+    
+    // Cordova is ready to be used!
+    //
+    
+    
+    var pictureSource;
+    var destinationType;
+    function onDeviceReady() {
+        
+        pictureSource = navigator.camera.PictureSourceType;
+        destinationType = navigator.camera.DestinationType;
+    }
+function updatename()
+{
+    alert("running");
+     var uid=window.localStorage.getItem("user_ID");
+     var usrname=document.getElementById("usrname_tf").value;
+     
+     $.ajax({
+            type       : "POST",
+            url        : "http://rangolite.com/coursetalk/webservice/course_talk/change_username.php",
+            data       :{user_id: uid, username: usrname},
+            success    : function(response) {
+            alert(response);
+            var objJSON = eval("( " + response + ")");
+            console.log("dat is "+objJSON);
+            
+            
+            
+            // window.location="message.html";
+            },
+            error      : function() {
+            console.error("error");
+            }
+            });
+
+}
+
+
+
+function updatepassword() {
+    var uid = window.localStorage.getItem("user_ID");
+    var pass = document.getElementById("password_tf").value;
+    
+    $
+    .ajax({
+          type : "POST",
+          url : "http://rangolite.com/coursetalk/webservice/course_talk/change_password.php",
+          data : {
+          user_id : uid,
+          new_password : pass
+          },
+          success : function(response) {
+          var objJSON = eval("( " + response + ")");
+          console.log("dat is " + objJSON);
+          
+          alert(objJSON.response);
+          
+          // window.location="message.html";
+          },
+          error : function() {
+          console.error("error");
+          }
+          });
+          
+}
+
+
+
+
+
+
+function logout()
+{
+    window.localStorage.setItem("loginstatus","0");
+    window.location="login.html";
+}
+
+
+
+
+
+
+
+
+
+
+
+function  updatepic()
+{
+    
+    var uid = window.localStorage.getItem("user_ID");
+    var imageUriToUpload = urioimage;
+    var url = encodeURI("http://rangolite.com/coursetalk/webservice/course_talk/update_image.php");
+    
+    //var username='your_user';
+    //var password='your_pwd';
+    //var newEmail = emailval+"@uwindsor.ca";
+    //alert(newEmail);
+    var params = new Object();
+    
+    // value removed for privacy reasons
+    params.user_id = uid;
+    //params.gcm_id = reg_id;
+    
+    var options = new FileUploadOptions();
+    options.fileKey = "image"; //depends on the api
+    options.fileName = imageUriToUpload.substr(imageUriToUpload
+                                               .lastIndexOf('/') + 1)
+                                               + "";
+                                               options.mimeType = "image/jpeg";
+                                               options.params = params;
+                                               options.chunkedMode = true; //this is important to send both data and files
+                                               
+                                               //var headers={'Authorization':"Basic " + Base64.encode(username + ":" + password)};
+                                               //options.headers = headers;
+                                               
+                                               var ft = new FileTransfer();
+                                               ft.upload(imageUriToUpload, url, win, fail, options);
+                                               
+                                               
+}
+
+var win = function(r) {
+    var objJSON = eval("( " + r.response + ")");
+    
+    alert("Registration Successfull " + objJSON.response.message);
+    console.log("Code_win = " + r.responseCode);
+    console.log("Response_win = " + r.response);
+    console.log("Sent = " + r.bytesSent);
+    window.location = "login.html";
+}
+
+var fail = function(error) {
+    alert("An error has occurred: Code = " + error.code);
+    console.log("upload error source " + error.source);
+    console.log("upload error target " + error.target);
+}
+
+
+
+
+
+function selectPicture(source) {
+    
+    // Retrieve image file location from specified source
+    navigator.camera.getPicture(onPhotoURISuccess, onFail, { quality: 50, destinationType: destinationType.FILE_URI, sourceType: source });
+    // alert("kkllllmm");
+}
+var urioimage;
+function onPhotoURISuccess(imageURI)
+{
+	var myImg = document.getElementById("prf_img");
+	//myImg.style.display = 'block';
+    urioimage=imageURI;
+	myImg.src = imageURI;
+}
+
+function onFail() {
+    navigator.notification.alert('Failed because: ' );
+}
+
+
+
+
+
+
+
+
+
+    </script>
+</body>
+</html>

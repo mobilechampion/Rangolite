@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html class="ie ie6" lang="en"> <![endif]-->
+<!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!-->
+<html lang="en">
+<!--<![endif]-->
+<head>
+<meta charset="utf-8">
+<title>Class Chat</title>
+<meta name="description" content="">
+<meta name="author" content="">
+<meta name="viewport" content="width=device-width, user-scalable=no">
+<link rel="stylesheet" href="app_html/css/font.css">
+    
+    
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+    
+    
+<link href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,700italic,400,600,700,800" rel='stylesheet' type='text/css'>  
+<link rel="stylesheet" type="text/css" href="app_html/css/style.css" />
+</head>
+
+<body>
+
+
+<div class="page-wrap">
+  
+  <div class="main">
+<div class="wraper">
+<div class="header">
+   
+<h1>RangoLite</h1>
+<input type="button" value="Edit" id="edit_btn"
+onclick="deleteData();" />
+</div>
+<div class="header_bo" style="">
+<p></p>
+</div>
+
+<div id="loadingMsg" style="position:relative; top:50px;  " align="center" >
+    <img src="app_html/images/preloader-grey.gif" width="40"/>
+</div>
+
+
+<div class="iner_con" id="content_div">
+
+
+
+</div>
+
+</div>
+      
+</div>
+
+<footer class="site-footer">
+  <div class="main">
+<div class="wraper">
+  <div class="footer">
+<ul>
+<li><a href="#"><span><img src="app_html/images/f1.png" alt="img"></span>My Classes</a></li>
+<li><a href="search.html"><span><img src="app_html/images/f2.png" alt="img"></span>Search</a></li>
+<li><a href="create.html"><span><img src="app_html/images/f3.png" alt="img"></span>Create</a></li>
+<li><a href="setting.html"><span><img src="app_html/images/f4.png" alt="img"></span>Settings</a></li>
+</ul>
+</div>
+</div>
+      
+</div>
+</footer>
+
+
+<script type="text/javascript" src="cordova-2.2.0.js"></script>
+<script type="text/javascript" src="js/index.js"></script>
+<script type="text/javascript" src="js/jquery-1.9.0.min.js"></script>
+<script type="text/javascript" src="js/jquery.mobile-1.1.1.js"></script>
+<script type="text/javascript" src="js/modernizr-2.6.1.min.js"></script>
+<script type="text/javascript">
+    document.addEventListener("deviceready",onDeviceReady,false);
+    
+    // Cordova is ready to be used!
+    //
+    function onDeviceReady() {
+        
+       
+        
+        $('#loadingMsg').show();
+      //  getallclass();
+        getMYclass();
+        
+        //alert("id="+id);
+
+    }
+var subject_arry = new Array();
+var prop_arry = new Array();
+var time_arry = new Array();
+var classid_arry = new Array();
+var img_ary= new Array();
+
+function  getMYclass()
+{
+    
+     var userid=window.localStorage.getItem("user_ID");
+     
+    $.ajax({
+           type       : "POST",
+           url        : "http://rangolite.com/coursetalk/webservice/course_talk/fetchgroupdetails.php",
+           data       :{user_id:userid},
+           success    : function(response) {
+           //alert("gagan test:"+response);
+           var objJSON = eval("( " + response + ")");
+           console.error("kkll"+ JSON.stringify(objJSON));
+            $('#loadingMsg').hide();
+            console.error("kklloo"+ objJSON);
+           var array_count=objJSON.response.subject.length;
+           
+           for(var i=0;i<array_count;i++)
+           {
+           
+           subject_arry.push(objJSON.response.subject[i]);
+           
+           prop_arry.push(objJSON.response.professor[i]);
+           
+           time_arry.push(objJSON.response.schedule[i]);
+           classid_arry.push(objJSON.response.classid[i]);
+           img_ary.push(objJSON.response.image[i]);
+          // console.log("hhh");
+           }
+          // alert("array_count"+subject_arry);
+           getALLarray(subject_arry,prop_arry,time_arry,classid_arry,img_ary);
+           
+           },
+           error      : function() {
+           console.error("errorCONSOLE");
+           }
+           });
+           
+           
+           
+}
+
+function getALLarray(subarray,proarray,tmarray,classarray,imagearray)
+{
+   /// alert("arrayis"+subarray);
+    
+    $('#loadingMsg').hide();
+    
+    var tablestring="" ;
+    tablestring =tablestring+ '<table style="width:100%;">';
+    for (var i = 0, len = subarray.length; i < len; ++i)
+    {
+        
+        var feedsCount=0;
+        tablestring = tablestring + "<tr>";
+                tablestring = tablestring + '<td><div class="first_noti" onclick="return showFeeds(this.id);" id=' + classarray[i] + '>' +'<div class="first_noti_img"><img  src='+imagearray[i]+' / style=></div><div name=' + subarray[i] + '  id=' + subarray[i] + ' class="first_noti_con"><h3>'+subarray[i];
+        
+        tablestring=tablestring + '</h3><p>'+proarray[i]  +'</p><p>'+ tmarray[i]+'</p></div>';
+        
+       
+        tablestring = tablestring + "<div></td>";
+        tablestring = tablestring + "</tr>";
+    }
+    tablestring = tablestring + "</table>";
+    var divResult = document.getElementById("content_div");
+    divResult.innerHTML = tablestring;
+}
+function showFeeds(id)
+{
+    
+    var classID=id;
+    var userId=window.localStorage.getItem("loginstatus");
+    //addUsertToClass(classID,userId);
+    var name = document.getElementById("edit_btn");
+    if(name.value=="Edit")
+    {
+        
+    
+    window.localStorage.setItem("classid",classID);
+    
+    $.ajax({
+           type       : "POST",
+           url        : "http://rangolite.com/coursetalk/webservice/course_talk/create_table_group.php",
+           data       :{class_id:classID},
+           success    : function(response) {
+           var objJSON = eval("( " + response + ")");
+          // console.error( objJSON);
+          // alert(objJSON);
+           
+           window.location="message.html#1375";
+           },
+           error      : function() {
+           console.error("error");
+           }
+           });
+           
+    }
+
+else
+{
+     var userid=window.localStorage.getItem("user_ID");
+    $('#loadingMsg').show();
+    
+    $.ajax({
+          type : "POST",
+          url : "http://rangolite.com/coursetalk/webservice/course_talk/delete_user_from_group.php",
+          data : {
+          class_id : classID,user_id:userid
+          },
+          success : function(response) {
+          var objJSON = eval("( " + response + ")");
+          alert(objJSON.response.value);
+          console.log(JSON.stringify(response));
+          //var array_count = objJSON.response.subject.length;
+          // alert("array_count"+objJSON.response.image);
+          
+          $('#loadingMsg').hide();
+          
+
+           
+           subject_arry.splice(classid_arry.indexOf(id),1);
+           prop_arry.splice(classid_arry.indexOf(id),1);
+           time_arry.splice(classid_arry.indexOf(id),1);
+           classid_arry.splice(classid_arry.indexOf(id),1);
+           img_ary.splice(classid_arry.indexOf(id),1);
+                                     
+                                     
+          
+          getALLarray(subject_arry, prop_arry, time_arry,
+                      classid_arry, img_ary);
+          
+          },
+          error : function() {
+          console.error("error comming");
+          $('#loadingMsg').hide();
+          }
+          });
+}
+
+}
+
+
+
+
+function deleteData() {
+    var name = document.getElementById("edit_btn");
+    
+    if (name.value == "Edit") {
+        name.value = "Delete";
+    } else {
+        name.value = "Edit";
+    }
+    
+}
+
+
+
+
+function  getallclass()
+{
+    // subject_arry.splice(0, subject_arry.length);
+    // prop_arry.splice(0, prop_arry.length);
+    // time_arry.splice(0, time_arry.length);
+    // classid_arry.splice(0, classid_arry.length);
+    //  img_ary.splice(0, img_ary.length);
+    
+    
+    $.ajax({
+           type       : "POST",
+           url        : "http://rangolite.com/coursetalk/webservice/course_talk/fetch_subject.php",
+           
+           success    : function(response) {
+           
+           console.log(response);
+           var objJSON = eval("( " + response + ")");
+           
+           console.log(objJSON);
+           $('#loadingMsg').hide();
+           var array_count=objJSON.response.subject.length;
+           alert("array_count"+objJSON.response.subject);
+           for(var i=0;i<array_count;i++)
+           {
+           
+           subject_arry.push(objJSON.response.subject[i]);
+           
+           prop_arry.push(objJSON.response.professor[i]);
+           
+           time_arry.push(objJSON.response.schedule[i]);
+           classid_arry.push(objJSON.response.class_id[i]);
+           img_ary.push(objJSON.response.image[i]);
+           
+           }
+           console.log("jjkkll"+subject_arry);
+           //getALLarray(subject_arry,prop_arry,time_arry,classid_arry,img_ary);
+           
+           },
+           error      : function() {
+           console.error("error");
+           }
+           });
+           
+}
+
+    </script>
+
+
+</body>
+</html>

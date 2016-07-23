@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html class="ie ie6" lang="en"> <![endif]-->
+<!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!-->
+<html lang="en">
+<!--<![endif]-->
+<head>
+<meta charset="utf-8">
+<title>Class Chat</title>
+<meta name="description" content="">
+<meta name="author" content="">
+<meta name="viewport" content="width=device-width, user-scalable=no">
+<link rel="stylesheet" href="app_html/css/font.css">
+<link href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,700italic,400,600,700,800" rel='stylesheet' type='text/css'>
+<link rel="stylesheet" type="text/css" href="app_html/css/style.css" />
+</head>
+
+<body>
+
+
+<div class="page-wrap">
+  
+  <div class="main">
+<div class="wraper">
+<div class="header">
+<h1><a href="index.html" class="btnb">BACK</a>My Classes</h1>
+</div>
+<div class="header_bo">
+<p></p>
+</div>
+
+<div class="iner_con" id="content_div" >
+<!--<div class="first_noti">
+<div class="first_noti_con1"><h3>Econ 200</h3>
+<p>Prof: Lane</p>
+</div>
+
+<div class="first_noti_conR">
+<p>07:04</p>
+</div>
+
+</div>-->
+
+
+
+
+
+</div>
+
+
+</div>
+</div>
+      
+</div>
+
+<footer class="site-footer msg_footer" >
+  <div class="main">
+<div class="wraper">
+
+<div class="iner_con">
+<div class="message">
+<textarea id="msgbox" ></textarea>
+<input type="button" value="Send" class="button7" onclick="sendMessage();">
+</div>
+ </div>
+  
+</div>
+      
+</div>
+</footer>
+<script type="text/javascript" src="cordova-2.2.0.js"></script>
+<script type="text/javascript" src="js/index.js"></script>
+<script type="text/javascript" src="js/jquery-1.9.0.min.js"></script>
+<script type="text/javascript" src="js/jquery.mobile-1.1.1.js"></script>
+<script type="text/javascript" src="js/modernizr-2.6.1.min.js"></script>
+<script type="text/javascript">
+document.addEventListener("deviceready",onDeviceReady,false);
+
+// Cordova is ready to be used!style=" height: 70px; "  style="  margin-bottom: -70px; "
+//
+function onDeviceReady() {
+    allmessages();
+    myFunction();
+}
+function myFunction()
+{
+    setInterval(function(){allmessages()},10000);
+}
+
+
+var name_arry = new Array();
+var msg_arry = new Array();
+var time_arry = new Array();
+function allmessages()
+{
+    var ClassId=window.localStorage.getItem("classid");
+    //alert("ClassId"+ClassId);
+    
+    name_arry.splice(0, name_arry.length);
+    msg_arry.splice(0, msg_arry.length);
+    time_arry.splice(0, time_arry.length);
+    $.ajax({
+           type       : "POST",
+           url        : "http://rangolite.com/coursetalk/webservice/course_talk/fetch_chats.php",
+           data       :{class_id:ClassId},
+           success    : function(response) {
+           var objJSON = eval("( " + response + ")");
+           console.log("dat is "+objJSON);
+           
+           var array_count=objJSON.response.username.length;
+           
+           for(var i=0;i<array_count;i++)
+           {
+           
+           name_arry.push(objJSON.response.username[i]);
+           
+           msg_arry.push(objJSON.response.message[i]);
+           
+           time_arry.push(objJSON.response.time[i]);
+           
+           }
+           // alert(name_arry);
+           getALLmessages(name_arry,msg_arry,time_arry);
+           
+           // window.location="message.html";
+           },
+           error      : function() {
+           console.error("error");
+           }
+           });
+}
+
+
+function getALLmessages(namearray,msagearray,tmarray)
+{
+    // alert("arrayis"+namearray);
+    
+    $('#loadingMsg').hide();
+    var myid;
+    var tablestring="" ;
+    tablestring =tablestring+ '<table style="width:100%;">';
+    for (var i = 0, len = namearray.length; i < len; ++i)
+    {
+        if(i==namearray.length-1)
+        {
+            myid="1375";
+        }
+        var feedsCount=0;
+        tablestring = tablestring + "<tr>";
+        tablestring = tablestring + '<td><div class="first_noti" onclick="return showFeeds(this.id);" id=' + myid + '>' +'<div name=' + namearray[i] + '  id=' + namearray[i] + ' class="first_noti_con cont_bx"><h3>'+namearray[i];
+        
+        tablestring=tablestring + '</h3><p>'+msagearray[i]  +'</p><p>'+ tmarray[i]+'</p></div>';
+        
+        
+        tablestring = tablestring + "<div></td>";
+        tablestring = tablestring + "</tr>";
+    }
+    tablestring = tablestring + "</table>";
+    var divResult = document.getElementById("content_div");
+    divResult.innerHTML = tablestring;
+    
+    // $("#content_div").scrollTo( 800, 0, {queue:true} );
+    $("html, body").animate({
+                            scrollTop: $("#1375").offset().top
+                            }, 2000);
+}
+function showFeeds(id)
+{
+    alert(id);
+}
+
+function sendMessage()
+{
+   // alert("im here");
+    var uid=window.localStorage.getItem("user_ID");
+    var ClassId=window.localStorage.getItem("classid");
+    var msgtext=document.getElementById("msgbox").value;
+    if(msgtext.length>0)
+    {
+        //alert("ClassId"+ClassId);
+        $.ajax({
+               type       : "POST",
+               url        : "http://rangolite.com/coursetalk/webservice/course_talk/chat_users.php",
+               data       :{user_id:uid,class_id:ClassId,message:msgtext},
+               success    : function(response) {
+               var objJSON = eval("( " + response + ")");
+               console.log("dat is "+JSON.stringify(objJSON));
+               
+               document.getElementById("msgbox").value='';
+              
+               allmessages();
+               //           var array_count=objJSON.response.username.length;
+               //
+               //           for(var i=0;i<array_count;i++)
+               //           {
+               //
+               //           name_arry.push(objJSON.response.username[i]);
+               //
+               //           msg_arry.push(objJSON.response.message[i]);
+               //
+               //           time_arry.push(objJSON.response.time[i]);
+               //
+               //           }
+               //           // alert(name_arry);
+               //           getALLmessages(name_arry,msg_arry,time_arry);
+               
+               // window.location="message.html";
+               },
+               error      : function() {
+               console.error("error");
+               }
+               });
+    }
+    else
+    {
+        
+    }
+    
+}
+</script>
+</body>
+</html>

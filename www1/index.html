@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+     KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+-->
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+        <link rel="stylesheet" type="text/css" href="css/index.css" />
+        <title>Hello World</title>
+    </head>
+    <body>
+        <div class="homediv">
+            <div id="divheadbar">catter</div>
+        
+        
+            
+        <div id="divclass" >
+            <button type="button" onclick="fff()">class!</button>
+            </div>
+        
+        
+        <div id="divsetting" >
+            
+            <table id="settingtable">
+                
+                <tr><td>Username  <input id="User_name" type="text" class="td_textfield" /></td></tr>
+                
+            </table>
+
+            </div>
+        
+        <div id="divcreate" >
+           
+            <div id="create_button">creating a chat</div>
+            </br>
+            
+            <table id="createtable">
+                
+                <tr><td>Course code  <input id="course_code" type="text" class="td_textfield" /></td></tr>
+                 <tr><td>Class name    <input id="class_name" type="text" class="td_textfield" /></td></tr>
+                 <tr><td>Professor    <input id="professor" type="text" class="td_textfield" /></td></tr>
+                     <tr><td>Section #    <input id="section" type="text" class="td_textfield" /></td></tr>
+                 <tr><td><button type="button"  id="crt_button"> Create class</button></td></tr>
+                </table>
+            
+            
+            
+            </div>
+       
+        
+        <div id="divtoolbar"> <table style="width:100% ">
+            <tr><td style="width:33% ;border:1px;border-style:solid;">
+              <div id="divtoolbaritem" onclick="classclick();">    Class</div>
+            </td>
+            <td style="width:33%;border:1px;border-style:solid;">
+               <div id="divtoolbaritem" onclick="createclick();">    Create</div>
+               
+               
+            </td>
+            <td style="width:90%;border:1px;border-style:solid;">
+               <div id="divtoolbaritem" onclick="settingclick();">    Setting</div>
+            </td></tr></table></div>
+        </div>
+        
+        <div id="divlogin" style="display:none" ></br></br></br></br>
+           <div id="clickdiv" onclick="ggg();" >login</div>
+           </br></br></br></br>
+           
+           
+           <table>
+               <tr><td>
+               UserName :<input id="username" type="text"/>
+               </td></tr>
+               <tr><td>
+               Password :<input id="password" type="password"/>
+               </td></tr>
+               <tr><td>
+               <input type="button" id="loginbtn" onclick="loginclicked();" value="Login"
+                   
+                  
+                   <button>ForgetPassword</button>
+                  
+                   
+                   
+                       <button>Create Account</button>
+                   
+                   </td>
+                   </tr>
+                   </table>
+            </div>
+        
+        
+        
+        
+        
+      <!--  <div style="height:200px">
+            
+                </div>
+                <div style="bottom:2px; position: absolute; width: 98%;margin-right: 2%">
+                    <table style="border: 0px; border-style: solid; width: 100%; padding-right: 2%">
+                        <tr>
+                            <td style="border: 1px; border-style: solid;width: 32%;background-color: #cccc77">
+                                <div id="class">
+                                    <label>Class</label>
+                                </div>
+                            </td>
+                            <td style="border: 1px; border-style: solid;width: 32%;background-color: #cccc77">
+                                <div id="create">
+                                    <label>Create</label>
+                                </div>
+                            </td>
+                            <td style="border: 1px; border-style: solid;background-color: #cccc77">
+                                <div id="setting">
+                                    <label>Setting</label>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                    
+                </div>-->
+                
+          <script type="text/javascript" src="cordova-2.2.0.js"></script>
+        <script type="text/javascript" src="js/index.js"></script>
+         000000+<script type="text/javascript" src="js/jquery-1.9.0.min.js"></script>
+         <script type="text/javascript" src="js/jquery.mobile-1.1.1.js"></script>
+          <script type="text/javascript" src="js/modernizr-2.6.1.min.js"></script>
+        <script type="text/javascript">
+            app.initialize();
+            
+            $('#divlogin').show();
+             $('.homediv').hide();
+             
+           function ggg()
+           {
+               alert("gggggg");
+$('.homediv').show();
+$('#divlogin').hide();
+
+
+           }
+        
+        
+    function loginclicked()
+        {
+           //alert("gggggg");
+           $('.homediv').show();
+           $('#divlogin').hide();
+        }
+        function settingclick()
+        {
+            //alert("setting clickeed");
+            $('#divsetting').show();
+            $('#divcreate').hide();
+            $('#divclass').hide();
+        }
+        function createclick()
+        {
+           // alert("create clickeed");
+            $('#divsetting').hide();
+            $('#divcreate').show();
+            $('#divclass').hide();
+        }
+        function classclick()
+        {
+            //alert("class clickeed");
+            $('#divsetting').hide();
+            $('#divcreate').hide();
+            $('#divclass').show();
+        }
+        
+        </script>
+    </body>
+</html>

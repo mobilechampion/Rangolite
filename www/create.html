@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html class="ie ie6" lang="en"> <![endif]-->
+<!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!-->
+<html lang="en">
+<!--<![endif]-->
+<head>
+<meta charset="utf-8">
+<title>Class Chat</title>
+<meta name="description" content="">
+<meta name="author" content="">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+    
+<meta name="viewport" content="width=device-width, user-scalable=no">
+<link rel="stylesheet" href="app_html/css/font.css">
+<link href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,700italic,400,600,700,800" rel='stylesheet' type='text/css'>
+<link rel="stylesheet" type="text/css" href="app_html/css/style.css" />
+</head>
+
+<body>
+
+
+<div class="page-wrap">
+<div class="main">
+<div class="wraper">
+<div class="header">
+<h1>RangoLite</h1>
+</div>
+<div class="header_bo">
+<p></p>
+</div>
+
+<div class="iner_con">
+<div class="input_feild">
+<label>Subject</label>
+<input type="text" name="Econ 101" placeholder="Econ 101" id="subject_tf">
+</div>
+<div class="input_feild">
+<label>Professor</label>
+<input type="text" name="Johnson" placeholder="Johnson" id="professor_tf">
+</div>
+<div class="input_feild">
+<label>Schedule</label>
+
+<table style="width:100%">
+    <tr>
+        <td style="width:40%">
+            <input type="text" name="Johnson" placeholder="hh" id="hr_tf" style="width:50%">
+            <label style="padding-left:15%">:</label></td>
+        <td style="width:40%">
+            <input type="text" name="Johnson" placeholder="mm" id="min_tf" style="width:50%"></td>
+    
+    <td >
+      <select style="width:110%;margin-left:10%;font-size:100%" id="am_pm" onclick="ff();">
+     <option>AM</option>
+     <option>PM</option>
+     </select>
+    </td> </tr>  </table>
+</div>
+<div id="loadingMsg" style="position:relative;  " align="center" >
+    <img src="app_html/images/preloader-grey.gif" width="40"/>
+</div>
+<div class="input_feild">
+<input type="button" value="Create Class" class="button" onclick="create_bttn();">
+</div>
+</div>
+
+
+
+</div>
+</div> 
+</div>
+
+<footer class="site-footer">
+  <div class="main">
+<div class="wraper">
+  <div class="footer">
+<ul>
+<li><a href="index.html"><span><img src="app_html/images/f1.png" alt="img"></span>My Classes</a></li>
+<li><a href="search.html"><span><img src="app_html/images/f2.png" alt="img"></span>Search</a></li>
+<li><a href="#"><span><img src="app_html/images/f3.png" alt="img"></span>Create</a></li>
+<li><a href="setting.html"><span><img src="app_html/images/f4.png" alt="img"></span>Settings</a></li>
+</ul>
+</div>
+</div>
+      
+</div>
+</footer>
+
+<script type="text/javascript" src="cordova-2.2.0.js"></script>
+<script type="text/javascript" src="js/index.js"></script>
+<script type="text/javascript" src="js/jquery-1.9.0.min.js"></script>
+<script type="text/javascript" src="js/jquery.mobile-1.1.1.js"></script>
+<script type="text/javascript" src="js/modernizr-2.6.1.min.js"></script>
+<script type="text/javascript">
+    document.addEventListener("deviceready",onDeviceReady,false);
+    
+    // Cordova is ready to be used!
+    //
+    var users_id;
+    function onDeviceReady() {
+        $('#loadingMsg').hide();
+        users_id=window.localStorage.getItem("user_ID");
+    }
+     
+     
+     function create_bttn()
+     {
+         
+         $('#loadingMsg').show();
+         var subjectval=document.getElementById("subject_tf").value;
+         var professorval=document.getElementById("professor_tf").value;
+         var scheduleval=document.getElementById("hr_tf").value+":"+document.getElementById("min_tf").value;
+         
+         
+         var e = document.getElementById("am_pm");
+         var strUser = e.options[e.selectedIndex].value;
+         
+         
+         
+         scheduleval=scheduleval+strUser;
+         //alert(" class created "+subjectval +"hhjj"+professorval+"gghjhj  "+scheduleval);
+         
+         
+         
+         
+         $.ajax({
+                type       : "POST",
+                url        : "http://rangolite.com/coursetalk/webservice/course_talk/create_class.php",
+               
+                data       : {subject :subjectval, professor :professorval,schedule : scheduleval, user_id :users_id},
+                
+                success    : function(response) {
+                var objJSON = eval("( " + response + ")");
+                navigator.notification.alert(objJSON.response);
+                $('#loadingMsg').hide();
+                console.error(objJSON.response);
+                },
+                error      : function() {
+                console.error("error");
+                }
+                });
+     }
+     function ff()
+     {
+          var hr = document.getElementById("hr_tf").value;
+          var mn=document.getElementById("min_tf").value;
+          if(hr>12)
+          {
+             navigator.notification.alert("hour  must not exceed 12");
+          }
+          if(mn>59)
+          {
+              navigator.notification.alert("minute  must not exceed 59");
+          }
+     }
+     
+    
+    </script>
+</body>
+</html>
